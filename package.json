@@ -1,5 +1,8 @@
 {
   "name": "md-links",
   "version": "0.1.0",
-  "bin": "./index.js"
+  "bin": "./index.js",
+  "dependencies": {
+    "xhr2": "^0.2.1"
+  }
 }
