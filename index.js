@@ -1,25 +1,33 @@
 #!/usr/bin/env node
-let mdLinks = require('./script');
-let option = 0;
+const mdLinks = require("./script");
+const fnPrintInfor = require("./printinfo.js");
 
-switch(process.argv[3]){
-    case '--validate': option = { validate: true };
+let option = { validate: false, stats: false };
+
+switch (process.argv[3]) {
+  case "--validate":
+    option.validate = true;
+    if (process.argv[4] == "--stats") {
+      option.stats = true;
+    }
+    mdLinks(process.argv[2], option).then((message) => {
+      fnPrintInfor(message, option);
+    });
     break;
-    default: option = { validate: false };
+  case "--stats":
+    option.stats = true;
+    if (process.argv[4] == "--validate") {
+      option.validate = true;
+    }
+    mdLinks(process.argv[2], option).then((message) => {
+      fnPrintInfor(message, option);
+    });
+    break;
+  case undefined:
+    mdLinks(process.argv[2], option).then((message) => {
+      fnPrintInfor(message, option);
+    });
+    break;
+  default:
+    console.log("comando no valido");
 }
-
-mdLinks(process.argv[2], option)
-  .then( (message) => {
-      //console.log(message);
-      if(option.validate){
-        message.forEach(element => {
-          console.log(element.file, element.href, element.ok, element.status, element.text);
-        });
-      }
-      else{
-        message.forEach(element => {
-          console.log(element.file, element.href, element.text);
-        });
-      }
-      
-  });
